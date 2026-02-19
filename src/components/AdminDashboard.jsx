@@ -43,18 +43,29 @@ export default function AdminDashboard() {
   };
 
   const fetchRooms = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get("/api/rooms", {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      });
-      setRooms(res.data);
-    } catch (err) {
-      toast.error("Failed to fetch rooms");
-    }
-  };
+  try {
+    const token = localStorage.getItem("token");
+    const res = await axios.get("/api/rooms", {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
 
-  useEffect(() => {
+    // Defensive: handle both array and object responses
+    const data = res.data;
+    if (Array.isArray(data)) {
+      setRooms(data);
+    } else if (data && Array.isArray(data.rooms)) {
+      setRooms(data.rooms);
+    } else {
+      console.warn("Unexpected rooms response:", data);
+      setRooms([]); // fallback
+    }
+  } catch (err) {
+    toast.error("Failed to fetch rooms");
+    setRooms([]); // ensure rooms stays an array
+  }
+};
+
+useEffect(() => {
     fetchRooms();
   }, [location.state?.refresh]);
 
@@ -113,16 +124,15 @@ export default function AdminDashboard() {
     }))
   );
 
-  const mergedRooms = useMemo(
-    () =>
-      fixedRooms.map((room) => {
-        const backendRoom = rooms.find(
-          (r) => Number(r.room_id) === Number(room.room_id)
-        );
-        return backendRoom ? { ...room, ...backendRoom } : room;
-      }),
-    [rooms]
-  );
+ const mergedRooms = useMemo(() =>
+  fixedRooms.map((room) => {
+    const backendRoom = Array.isArray(rooms)
+      ? rooms.find((r) => Number(r.room_id) === Number(room.room_id))
+      : null;
+    return backendRoom ? { ...room, ...backendRoom } : room;
+  }),
+[rooms]);
+
 
   return (
     <div className="p-6">
