@@ -46,12 +46,6 @@ export default function AdminDashboard() {
   try {
     
     const res = await api.get("/api/rooms");
-    // const token = localStorage.getItem("token");
-    // const res = await axios.get("/api/rooms", {
-    //   headers: token ? { Authorization: `Bearer ${token}` } : {}
-    // });
-
-    // Defensive: handle both array and object responses
     const data = res.data;
     if (Array.isArray(data)) {
       setRooms(data);

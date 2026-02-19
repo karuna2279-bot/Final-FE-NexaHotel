@@ -73,6 +73,10 @@ export default function AdminRoomPage() {
     // Use updated booking from backend
     // setRoom({ ...room, status: "extended" });
     setBooking(response.data.booking);
+    if (room) {
+      setRoom({ ...room, status: response.data.booking.status });
+    }
+    
   } catch (err) {
     console.error("Update error:", err.response?.data);
     toast.error(err.response?.data?.message || "Update failed");
