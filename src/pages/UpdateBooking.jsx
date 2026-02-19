@@ -1,17 +1,15 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import { toast } from "react-toastify";
 
 export default function UpdateBooking() {
-  const { roomId } = useParams(); // ✅ use roomId not room_id
+  const { roomId } = useParams(); // use roomId not room_id
   const navigate = useNavigate();
 
   const handleCheckout = async () => {
     try {
-      await axios.put(`/api/admin/rooms/${roomId}/checkout`, {}, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
+      await api.put(`/api/admin/rooms/${roomId}/checkout`, {});
       toast.success(`Room ${roomId} checked out successfully!`);
       navigate("/admin-dashboard");
     } catch (err) {
@@ -21,9 +19,7 @@ export default function UpdateBooking() {
 
   const handleExtend = async () => {
     try {
-      await axios.put(`/api/admin/rooms/${roomId}/extend`, {}, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
+      await api.put(`/api/admin/rooms/${roomId}/extend`, {});
       toast.success(`Room ${roomId} extended successfully!`);
       navigate("/admin-dashboard");
     } catch (err) {

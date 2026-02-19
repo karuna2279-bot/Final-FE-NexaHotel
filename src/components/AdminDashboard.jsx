@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState, useMemo } from "react";
-import axios from "axios";
+import api from "../api";
 import { toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
 import normal1 from "../assets/standard-1.jfif";
@@ -44,10 +44,12 @@ export default function AdminDashboard() {
 
   const fetchRooms = async () => {
   try {
-    const token = localStorage.getItem("token");
-    const res = await axios.get("/api/rooms", {
-      headers: token ? { Authorization: `Bearer ${token}` } : {}
-    });
+    
+    const res = await api.get("/api/rooms");
+    // const token = localStorage.getItem("token");
+    // const res = await axios.get("/api/rooms", {
+    //   headers: token ? { Authorization: `Bearer ${token}` } : {}
+    // });
 
     // Defensive: handle both array and object responses
     const data = res.data;

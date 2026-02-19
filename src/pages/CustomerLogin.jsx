@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 import { toast } from "react-toastify";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -28,7 +28,8 @@ export default function CustomerLogin() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("/api/customer/login", { email, password });
+      const API_BASE = import.meta.env.VITE_API_URL;
+      const res = await api.post(`${API_BASE}/api/customer/login`, { email, password });
 
       if (!res.data?.token) throw new Error("No token received from server");
 

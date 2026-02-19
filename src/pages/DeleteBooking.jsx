@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import { toast } from "react-toastify";
 
 export default function DeleteBooking() {
@@ -12,9 +12,7 @@ export default function DeleteBooking() {
 const handleDelete = async () => {
   try {
     if (window.confirm("Are you sure you want to delete this booking?")) {
-      await axios.delete(`/api/admin/bookings/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
+      await api.delete(`/api/admin/bookings/${id}`);
       toast.success("Booking deleted successfully!");
       navigate("/admin/bookings");
     }

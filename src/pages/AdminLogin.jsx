@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -13,7 +13,7 @@ export default function AdminLogin() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/api/auth/admin-login", { email, password });
+       const res = await api.post("/api/auth/admin-login", { email, password });
 
       const token = res.data.token || res.data.accessToken;
       const role = res.data.user?.role || res.data.role;

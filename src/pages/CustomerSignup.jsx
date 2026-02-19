@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import axios from "axios";
+import api from "../api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -15,7 +15,7 @@ export default function CustomerSignup() {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/customer/signup", form);
+      await api.post("/api/customer/signup", form);
       toast.success("Signup successful! Please login.");
       navigate("/customer/login");
     } catch (err) {

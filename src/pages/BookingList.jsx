@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -9,10 +9,8 @@ export default function BookingList() {
 
   const fetchBookings = async () => {
     try {
-      const res = await axios.get("/api/admin/bookings", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-      setBookings(res.data);
+      const res = await api.get("/api/admin/bookings");
+    setBookings(res.data);
     } catch (err) {
       toast.error("Failed to fetch bookings");
     }
@@ -28,9 +26,7 @@ export default function BookingList() {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`/api/admin/bookings/${bookingId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete(`/api/admin/bookings/${bookingId}`);
       toast.success("Booking deleted");
       fetchBookings(); // refresh list after deletion
     } catch (err) {

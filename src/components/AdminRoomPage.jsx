@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import { toast } from "react-toastify";
 import BookingForm from "../pages/BookingForm"; // reuse customer booking form
 
@@ -16,10 +16,7 @@ export default function AdminRoomPage() {
   useEffect(() => {
     const fetchRoom = async () => {
       try {
-        const token = localStorage.getItem("token"); // admin token
-        const res = await axios.get(`/api/admin/rooms/${roomId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get(`/api/admin/rooms/${roomId}`);
         setRoom(res.data.room);
         setBooking(res.data.booking);
       } catch (err) {
@@ -31,10 +28,8 @@ export default function AdminRoomPage() {
 
   const handleCheckout = async () => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.put(`/api/admin/rooms/${roomId}/checkout`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      // const token = localStorage.getItem("token");
+      await api.put(`/api/admin/rooms/${roomId}/checkout`);
       toast.success("Room checked out successfully");
       navigate("/admin-dashboard", { state: { refresh: Date.now() } });
       setRoom({ ...room, status: "available" });
@@ -70,9 +65,7 @@ export default function AdminRoomPage() {
       status: "extended"  // mark as extended
     };
 
-    const response = await axios.put(`/api/bookings/${booking._id}`, payLoad, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await api.put(`/api/bookings/${booking._id}`, payLoad);
 
     toast.success("Booking updated successfully");
     setIsExtending(false);

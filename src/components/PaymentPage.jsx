@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import { toast } from "react-toastify";
 
 export default function PaymentPage() {
@@ -49,7 +49,7 @@ export default function PaymentPage() {
       const numericRoomId = parseInt(roomId, 10);
 
       // Send booking details to backend
-      const response = await axios.post(
+      const response = await api.post(
         "/api/bookings",
         {
           ...bookingForm,
@@ -57,10 +57,10 @@ export default function PaymentPage() {
           adults,
           children,
           category: bookingForm.category
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` }
         }
+        // {
+        //   headers: { Authorization: `Bearer ${token}` }
+        // }
       );
 
       toast.success("Payment successful, booking confirmed!");
